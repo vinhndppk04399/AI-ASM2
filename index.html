@@ -1,309 +1,414 @@
-import React, { useState, useEffect } from 'react';
-import { 
-  Cpu, 
-  Video, 
-  Bus, 
-  Truck, 
-  AlertTriangle, 
-  ShieldCheck, 
-  Zap, 
-  Menu, 
-  X,
-  ChevronRight,
-  BrainCircuit,
-  Copyright
-} from 'lucide-react';
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PKO4399 - Giải Pháp AI Giao Thông</title>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS (CDN chạy trực tiếp) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Cấu hình Tailwind -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        orbitron: ['Orbitron', 'monospace'],
+                    },
+                    colors: {
+                        slate: {
+                            950: '#020617', // Màu nền cực tối
+                        }
+                    }
+                }
+            }
+        }
+    </script>
 
-const App = () => {
-  const [isScrolled, setIsScrolled] = useState(false);
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <style>
+        /* Hiệu ứng cuộn mượt */
+        html {
+            scroll-behavior: smooth;
+        }
+        /* Tùy chỉnh thanh cuộn */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0f172a; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #475569; 
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #64748b; 
+        }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-200 font-sans selection:bg-purple-500 selection:text-white overflow-x-hidden">
 
-  // Xử lý hiệu ứng cuộn trang
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
-    };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+    <!-- Navigation -->
+    <nav id="navbar" class="fixed w-full z-50 transition-all duration-300 bg-transparent">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <!-- Logo -->
+                <div class="flex items-center gap-2 group cursor-pointer">
+                    <div class="relative w-10 h-10 bg-gradient-to-tr from-blue-600 to-purple-600 rounded-full flex items-center justify-center border-2 border-slate-300 shadow-[0_0_15px_rgba(147,51,234,0.5)]">
+                        <i data-lucide="brain-circuit" class="text-white w-6 h-6 animate-pulse"></i>
+                    </div>
+                    <div class="flex flex-col">
+                        <span class="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 via-white to-purple-400 tracking-wider font-orbitron">
+                            PKO4399
+                        </span>
+                        <span class="text-[10px] text-slate-400 uppercase tracking-widest leading-none">AI Solution</span>
+                    </div>
+                </div>
+                
+                <!-- Desktop Menu -->
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-8">
+                        <a href="#trang-chu" class="hover:text-cyan-400 transition-colors px-3 py-2 rounded-md text-sm font-medium uppercase tracking-wider">Trang chủ</a>
+                        <a href="#giai-phap" class="hover:text-cyan-400 transition-colors px-3 py-2 rounded-md text-sm font-medium uppercase tracking-wider">Giải pháp</a>
+                        <a href="#thach-thuc" class="hover:text-cyan-400 transition-colors px-3 py-2 rounded-md text-sm font-medium uppercase tracking-wider">Thách thức</a>
+                        <a href="#lien-he" class="hover:text-cyan-400 transition-colors px-3 py-2 rounded-md text-sm font-medium uppercase tracking-wider">Liên hệ</a>
+                        <button class="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white px-6 py-2 rounded-full font-bold transition-all shadow-[0_0_10px_rgba(59,130,246,0.5)] border border-white/20">
+                            Tải tài liệu
+                        </button>
+                    </div>
+                </div>
 
-  // Dữ liệu trích xuất từ file Word
-  const features = [
-    {
-      title: "Quản lý & Điều phối",
-      icon: <Video className="w-8 h-8 text-cyan-400" />,
-      content: "Hệ thống đèn tín hiệu thông minh tự động điều chỉnh theo lưu lượng thực tế. Camera AI phát hiện vi phạm (ngược chiều, vượt đèn đỏ) giúp giảm tải nhân lực.",
-      color: "from-cyan-500 to-blue-500"
-    },
-    {
-      title: "Giám sát & An toàn",
-      icon: <ShieldCheck className="w-8 h-8 text-purple-400" />,
-      content: "Nhận diện biển số (ANPR) tại trạm thu phí không dừng (ETC). Cảnh báo tai nạn bằng cách phân tích tư thế người lái và trạng thái xe để phát hiện buồn ngủ.",
-      color: "from-purple-500 to-pink-500"
-    },
-    {
-      title: "Giao thông công cộng",
-      icon: <Bus className="w-8 h-8 text-green-400" />,
-      content: "Tối ưu hóa lộ trình xe buýt dựa trên dự đoán nhu cầu hành khách. Hệ thống vé thông minh đề xuất lộ trình di chuyển tối ưu nhất.",
-      color: "from-emerald-500 to-teal-500"
-    },
-    {
-      title: "Logistics & Vận tải",
-      icon: <Truck className="w-8 h-8 text-yellow-400" />,
-      content: "Dự đoán thời gian giao hàng dựa trên dữ liệu thời tiết và lưu lượng. Robot phân loại hàng hóa tự động giúp giảm chi phí vận hành kho bãi.",
-      color: "from-orange-500 to-yellow-500"
-    },
-    {
-      title: "Phương tiện tự hành",
-      icon: <Cpu className="w-8 h-8 text-red-400" />,
-      content: "Thử nghiệm xe tự hành cấp độ thấp tại các khu công nghiệp và trường đại học, mở ra kỷ nguyên mới cho giao thông thông minh tại Việt Nam.",
-      color: "from-red-500 to-rose-500"
-    }
-  ];
-
-  const Logo = () => (
-    <div className="flex items-center gap-2 group cursor-pointer">
-      <div className="relative w-10 h-10 bg-gradient-to-tr from-blue-600 to-purple-600 rounded-full flex items-center justify-center border-2 border-slate-300 shadow-[0_0_15px_rgba(147,51,234,0.5)]">
-        <BrainCircuit className="text-white w-6 h-6 animate-pulse" />
-      </div>
-      <div className="flex flex-col">
-        <span className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 via-white to-purple-400 tracking-wider font-orbitron" style={{ fontFamily: 'monospace' }}>
-          PKO4399
-        </span>
-        <span className="text-[10px] text-slate-400 uppercase tracking-widest leading-none">AI Solution</span>
-      </div>
-    </div>
-  );
-
-  return (
-    <div className="min-h-screen bg-slate-950 text-slate-200 font-sans selection:bg-purple-500 selection:text-white overflow-x-hidden">
-      
-      {/* Navigation */}
-      <nav className={`fixed w-full z-50 transition-all duration-300 ${isScrolled ? 'bg-slate-900/90 backdrop-blur-md shadow-lg border-b border-white/10' : 'bg-transparent'}`}>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-20">
-            <Logo />
-            
-            <div className="hidden md:block">
-              <div className="ml-10 flex items-baseline space-x-8">
-                {['Trang chủ', 'Giải pháp', 'Thách thức', 'Liên hệ'].map((item) => (
-                  <a key={item} href={`#${item.toLowerCase()}`} className="hover:text-cyan-400 transition-colors px-3 py-2 rounded-md text-sm font-medium uppercase tracking-wider">
-                    {item}
-                  </a>
-                ))}
-                <button className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white px-6 py-2 rounded-full font-bold transition-all shadow-[0_0_10px_rgba(59,130,246,0.5)] border border-white/20">
-                  Tải tài liệu
-                </button>
-              </div>
+                <!-- Mobile Menu Button -->
+                <div class="-mr-2 flex md:hidden">
+                    <button id="mobile-menu-btn" class="text-white hover:text-cyan-400 p-2">
+                        <i data-lucide="menu" id="menu-icon"></i>
+                    </button>
+                </div>
             </div>
-
-            <div className="-mr-2 flex md:hidden">
-              <button onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} className="text-white hover:text-cyan-400 p-2">
-                {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
-              </button>
-            </div>
-          </div>
         </div>
         
-        {/* Mobile Menu */}
-        {isMobileMenuOpen && (
-          <div className="md:hidden bg-slate-900 border-b border-white/10">
-            <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-              {['Trang chủ', 'Giải pháp', 'Thách thức', 'Liên hệ'].map((item) => (
-                <a key={item} href="#" className="block px-3 py-2 rounded-md text-base font-medium hover:bg-slate-800 hover:text-cyan-400">
-                  {item}
-                </a>
-              ))}
+        <!-- Mobile Menu Panel -->
+        <div id="mobile-menu" class="hidden md:hidden bg-slate-900 border-b border-white/10">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                <a href="#trang-chu" class="block px-3 py-2 rounded-md text-base font-medium hover:bg-slate-800 hover:text-cyan-400">Trang chủ</a>
+                <a href="#giai-phap" class="block px-3 py-2 rounded-md text-base font-medium hover:bg-slate-800 hover:text-cyan-400">Giải pháp</a>
+                <a href="#thach-thuc" class="block px-3 py-2 rounded-md text-base font-medium hover:bg-slate-800 hover:text-cyan-400">Thách thức</a>
+                <a href="#lien-he" class="block px-3 py-2 rounded-md text-base font-medium hover:bg-slate-800 hover:text-cyan-400">Liên hệ</a>
             </div>
-          </div>
-        )}
-      </nav>
+        </div>
+    </nav>
 
-      {/* Hero Section */}
-      <section className="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden">
-        {/* Abstract Background Elements */}
-        <div className="absolute top-0 left-0 w-full h-full overflow-hidden z-0">
-          <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-purple-600/20 rounded-full blur-[100px] animate-pulse"></div>
-          <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-cyan-600/20 rounded-full blur-[100px] animate-pulse delay-1000"></div>
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] border border-white/5 rounded-full"></div>
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] border border-white/10 rounded-full"></div>
+    <!-- Hero Section -->
+    <section id="trang-chu" class="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden">
+        <!-- Abstract Background Elements -->
+        <div class="absolute top-0 left-0 w-full h-full overflow-hidden z-0 pointer-events-none">
+            <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-purple-600/20 rounded-full blur-[100px] animate-pulse"></div>
+            <div class="absolute bottom-1/4 right-1/4 w-96 h-96 bg-cyan-600/20 rounded-full blur-[100px] animate-pulse" style="animation-delay: 1s;"></div>
+            <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] border border-white/5 rounded-full"></div>
+            <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] border border-white/10 rounded-full"></div>
         </div>
 
-        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 mb-8 backdrop-blur-sm">
-            <span className="w-2 h-2 rounded-full bg-green-500 animate-ping"></span>
-            <span className="text-sm font-medium text-cyan-300">Công nghệ tương lai cho Việt Nam</span>
-          </div>
-          
-          <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight">
-            Ứng dụng <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-500">Trí Tuệ Nhân Tạo</span><br />
-            Trong Ngành Giao Thông
-          </h1>
-          
-          <p className="max-w-3xl mx-auto text-lg md:text-xl text-slate-400 mb-10 leading-relaxed">
-            Giải pháp tối ưu hóa vận tải, giảm ùn tắc và nâng cao an toàn cho Hà Nội, TP.HCM, Đà Nẵng và toàn quốc.
-            Phát triển bởi <strong>PKO4399</strong>.
-          </p>
-
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-            <button className="px-8 py-4 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg font-bold text-white hover:shadow-[0_0_20px_rgba(147,51,234,0.5)] transition-all flex items-center gap-2">
-              Khám phá ngay <ChevronRight size={20} />
-            </button>
-            <button className="px-8 py-4 bg-white/5 border border-white/10 rounded-lg font-bold text-white hover:bg-white/10 transition-all">
-              Xem Demo Xe Tự Hành
-            </button>
-          </div>
-        </div>
-      </section>
-
-      {/* Solutions Grid (Features) */}
-      <section id="giải pháp" className="py-20 bg-slate-900/50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">Lĩnh Vực Ứng Dụng Chính</h2>
-            <div className="w-24 h-1 bg-gradient-to-r from-cyan-500 to-purple-500 mx-auto rounded-full"></div>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {features.map((feature, index) => (
-              <div key={index} className="group relative p-1 rounded-2xl bg-gradient-to-b from-white/10 to-transparent hover:from-cyan-500/50 hover:to-purple-500/50 transition-all duration-500">
-                <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/20 to-purple-500/20 blur-xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                <div className="relative h-full bg-slate-950 p-8 rounded-xl border border-white/5 overflow-hidden">
-                  <div className={`w-14 h-14 rounded-lg bg-gradient-to-br ${feature.color} bg-opacity-10 flex items-center justify-center mb-6`}>
-                    <div className="bg-slate-950 p-2 rounded-md">
-                      {feature.icon}
-                    </div>
-                  </div>
-                  <h3 className="text-xl font-bold mb-3 text-white group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-cyan-400 group-hover:to-purple-400 transition-colors">
-                    {feature.title}
-                  </h3>
-                  <p className="text-slate-400 leading-relaxed text-sm">
-                    {feature.content}
-                  </p>
-                  <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Stats / Challenges Section */}
-      <section id="thách thức" className="py-20 relative overflow-hidden">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="bg-gradient-to-r from-slate-900 to-slate-800 rounded-3xl p-8 md:p-12 border border-white/10 shadow-2xl relative">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-              <div>
-                <div className="flex items-center gap-3 mb-6">
-                  <AlertTriangle className="text-yellow-500" />
-                  <span className="text-yellow-500 font-bold uppercase tracking-wider">Thực trạng & Thách thức</span>
-                </div>
-                <h2 className="text-3xl md:text-4xl font-bold mb-6">Rào Cản Phát Triển Hạ Tầng Thông Minh</h2>
-                <p className="text-slate-400 mb-8">
-                  Mặc dù tiềm năng là rất lớn, nhưng việc triển khai AI tại Việt Nam vẫn đối mặt với những thách thức đáng kể cần được giải quyết đồng bộ.
-                </p>
-                <ul className="space-y-4">
-                  {[
-                    "Dữ liệu chưa đồng nhất trên phạm vi quốc gia",
-                    "Chi phí đầu tư hạ tầng & cảm biến còn cao",
-                    "Hành lang pháp lý cho xe tự hành chưa hoàn thiện"
-                  ].map((item, idx) => (
-                    <li key={idx} className="flex items-start gap-3">
-                      <div className="mt-1 min-w-[20px] h-5 rounded-full bg-red-500/20 flex items-center justify-center">
-                        <div className="w-2 h-2 bg-red-500 rounded-full"></div>
-                      </div>
-                      <span className="text-slate-300">{item}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-              <div className="relative">
-                <div className="absolute inset-0 bg-gradient-to-tr from-purple-500/20 to-cyan-500/20 rounded-2xl blur-lg transform rotate-3"></div>
-                <div className="relative bg-slate-950 border border-white/10 rounded-2xl p-8">
-                  <div className="flex items-center justify-between mb-8 pb-8 border-b border-white/10">
-                    <div>
-                      <p className="text-sm text-slate-400">Chủ sở hữu công nghệ</p>
-                      <h3 className="text-2xl font-bold text-white mt-1">PKO4399</h3>
-                    </div>
-                    <BrainCircuit className="w-12 h-12 text-purple-500" />
-                  </div>
-                  <div className="space-y-6">
-                    <div>
-                      <div className="flex justify-between mb-2">
-                        <span className="text-sm font-medium">Tối ưu hóa giao thông</span>
-                        <span className="text-sm font-bold text-cyan-400">85%</span>
-                      </div>
-                      <div className="w-full bg-slate-800 rounded-full h-2">
-                        <div className="bg-gradient-to-r from-cyan-500 to-blue-500 h-2 rounded-full w-[85%]"></div>
-                      </div>
-                    </div>
-                    <div>
-                      <div className="flex justify-between mb-2">
-                        <span className="text-sm font-medium">Độ chính xác nhận diện</span>
-                        <span className="text-sm font-bold text-purple-400">98.5%</span>
-                      </div>
-                      <div className="w-full bg-slate-800 rounded-full h-2">
-                        <div className="bg-gradient-to-r from-purple-500 to-pink-500 h-2 rounded-full w-[98.5%]"></div>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="mt-8 pt-6 border-t border-white/10 flex items-center justify-center text-slate-500 text-sm gap-2">
-                    <ShieldCheck size={16} /> Xác thực bản quyền bởi PKO4399
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Footer / Copyright Proof */}
-      <footer className="bg-slate-950 border-t border-white/10 pt-16 pb-8">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
-            <div className="col-span-1 md:col-span-2">
-              <Logo />
-              <p className="mt-4 text-slate-400 text-sm max-w-sm">
-                Tiên phong trong việc áp dụng Trí tuệ nhân tạo để giải quyết các bài toán giao thông đô thị tại Việt Nam. Hướng tới một tương lai di chuyển an toàn và thông minh.
-              </p>
+        <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 mb-8 backdrop-blur-sm">
+                <span class="w-2 h-2 rounded-full bg-green-500 animate-ping"></span>
+                <span class="text-sm font-medium text-cyan-300">Công nghệ tương lai cho Việt Nam</span>
             </div>
             
-            <div>
-              <h4 className="text-white font-bold mb-4 uppercase text-sm tracking-wider">Liên kết</h4>
-              <ul className="space-y-2 text-sm text-slate-400">
-                <li><a href="#" className="hover:text-cyan-400 transition-colors">Về chúng tôi</a></li>
-                <li><a href="#" className="hover:text-cyan-400 transition-colors">Dự án thí điểm</a></li>
-                <li><a href="#" className="hover:text-cyan-400 transition-colors">Tuyển dụng</a></li>
-              </ul>
-            </div>
-
-            <div>
-              <h4 className="text-white font-bold mb-4 uppercase text-sm tracking-wider">Pháp lý</h4>
-              <ul className="space-y-2 text-sm text-slate-400">
-                <li><a href="#" className="hover:text-cyan-400 transition-colors">Chính sách bảo mật</a></li>
-                <li><a href="#" className="hover:text-cyan-400 transition-colors">Điều khoản sử dụng</a></li>
-                <li className="flex items-center gap-2 text-purple-400 font-semibold">
-                  <Copyright size={14} /> Bản quyền PK04399
-                </li>
-              </ul>
-            </div>
-          </div>
-
-          <div className="border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
-            <p className="text-slate-500 text-sm">
-              © 2024 PKO4399. All rights reserved.
+            <h1 class="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight">
+                Ứng dụng <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-500">Trí Tuệ Nhân Tạo</span><br />
+                Trong Ngành Giao Thông
+            </h1>
+            
+            <p class="max-w-3xl mx-auto text-lg md:text-xl text-slate-400 mb-10 leading-relaxed">
+                Giải pháp tối ưu hóa vận tải, giảm ùn tắc và nâng cao an toàn cho Hà Nội, TP.HCM, Đà Nẵng và toàn quốc.
+                Phát triển bởi <strong>PKO4399</strong>.
             </p>
-            <div className="flex items-center gap-4">
-               {/* Giả lập badge bản quyền */}
-               <div className="px-3 py-1 bg-white/5 rounded border border-white/10 text-xs text-slate-400 font-mono">
-                  ID: PKO-4399-VN-AI
-               </div>
-            </div>
-          </div>
-        </div>
-      </footer>
-    </div>
-  );
-};
 
-export default App;
+            <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                <button class="px-8 py-4 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg font-bold text-white hover:shadow-[0_0_20px_rgba(147,51,234,0.5)] transition-all flex items-center gap-2">
+                    Khám phá ngay <i data-lucide="chevron-right" class="w-5 h-5"></i>
+                </button>
+                <button class="px-8 py-4 bg-white/5 border border-white/10 rounded-lg font-bold text-white hover:bg-white/10 transition-all">
+                    Xem Demo Xe Tự Hành
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Solutions Grid (Features) -->
+    <section id="giai-phap" class="py-20 bg-slate-900/50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4">Lĩnh Vực Ứng Dụng Chính</h2>
+                <div class="w-24 h-1 bg-gradient-to-r from-cyan-500 to-purple-500 mx-auto rounded-full"></div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Feature 1 -->
+                <div class="group relative p-1 rounded-2xl bg-gradient-to-b from-white/10 to-transparent hover:from-cyan-500/50 hover:to-purple-500/50 transition-all duration-500">
+                    <div class="absolute inset-0 bg-gradient-to-r from-cyan-500/20 to-purple-500/20 blur-xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                    <div class="relative h-full bg-slate-950 p-8 rounded-xl border border-white/5 overflow-hidden">
+                        <div class="w-14 h-14 rounded-lg bg-gradient-to-br from-cyan-500 to-blue-500 bg-opacity-10 flex items-center justify-center mb-6">
+                            <div class="bg-slate-950 p-2 rounded-md">
+                                <i data-lucide="video" class="w-8 h-8 text-cyan-400"></i>
+                            </div>
+                        </div>
+                        <h3 class="text-xl font-bold mb-3 text-white group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-cyan-400 group-hover:to-purple-400 transition-colors">
+                            Quản lý & Điều phối
+                        </h3>
+                        <p class="text-slate-400 leading-relaxed text-sm">
+                            Hệ thống đèn tín hiệu thông minh tự động điều chỉnh theo lưu lượng thực tế. Camera AI phát hiện vi phạm (ngược chiều, vượt đèn đỏ).
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Feature 2 -->
+                <div class="group relative p-1 rounded-2xl bg-gradient-to-b from-white/10 to-transparent hover:from-cyan-500/50 hover:to-purple-500/50 transition-all duration-500">
+                    <div class="absolute inset-0 bg-gradient-to-r from-cyan-500/20 to-purple-500/20 blur-xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                    <div class="relative h-full bg-slate-950 p-8 rounded-xl border border-white/5 overflow-hidden">
+                        <div class="w-14 h-14 rounded-lg bg-gradient-to-br from-purple-500 to-pink-500 bg-opacity-10 flex items-center justify-center mb-6">
+                            <div class="bg-slate-950 p-2 rounded-md">
+                                <i data-lucide="shield-check" class="w-8 h-8 text-purple-400"></i>
+                            </div>
+                        </div>
+                        <h3 class="text-xl font-bold mb-3 text-white group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-cyan-400 group-hover:to-purple-400 transition-colors">
+                            Giám sát & An toàn
+                        </h3>
+                        <p class="text-slate-400 leading-relaxed text-sm">
+                            Nhận diện biển số (ANPR) tại trạm thu phí không dừng (ETC). Cảnh báo tai nạn bằng cách phân tích tư thế người lái.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Feature 3 -->
+                <div class="group relative p-1 rounded-2xl bg-gradient-to-b from-white/10 to-transparent hover:from-cyan-500/50 hover:to-purple-500/50 transition-all duration-500">
+                    <div class="absolute inset-0 bg-gradient-to-r from-cyan-500/20 to-purple-500/20 blur-xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                    <div class="relative h-full bg-slate-950 p-8 rounded-xl border border-white/5 overflow-hidden">
+                        <div class="w-14 h-14 rounded-lg bg-gradient-to-br from-emerald-500 to-teal-500 bg-opacity-10 flex items-center justify-center mb-6">
+                            <div class="bg-slate-950 p-2 rounded-md">
+                                <i data-lucide="bus" class="w-8 h-8 text-green-400"></i>
+                            </div>
+                        </div>
+                        <h3 class="text-xl font-bold mb-3 text-white group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-cyan-400 group-hover:to-purple-400 transition-colors">
+                            Giao thông công cộng
+                        </h3>
+                        <p class="text-slate-400 leading-relaxed text-sm">
+                            Tối ưu hóa lộ trình xe buýt dựa trên dự đoán nhu cầu hành khách. Hệ thống vé thông minh đề xuất lộ trình tối ưu.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Feature 4 -->
+                <div class="group relative p-1 rounded-2xl bg-gradient-to-b from-white/10 to-transparent hover:from-cyan-500/50 hover:to-purple-500/50 transition-all duration-500">
+                    <div class="absolute inset-0 bg-gradient-to-r from-cyan-500/20 to-purple-500/20 blur-xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                    <div class="relative h-full bg-slate-950 p-8 rounded-xl border border-white/5 overflow-hidden">
+                        <div class="w-14 h-14 rounded-lg bg-gradient-to-br from-orange-500 to-yellow-500 bg-opacity-10 flex items-center justify-center mb-6">
+                            <div class="bg-slate-950 p-2 rounded-md">
+                                <i data-lucide="truck" class="w-8 h-8 text-yellow-400"></i>
+                            </div>
+                        </div>
+                        <h3 class="text-xl font-bold mb-3 text-white group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-cyan-400 group-hover:to-purple-400 transition-colors">
+                            Logistics & Vận tải
+                        </h3>
+                        <p class="text-slate-400 leading-relaxed text-sm">
+                            Dự đoán thời gian giao hàng dựa trên dữ liệu thời tiết. Robot phân loại hàng hóa tự động giúp giảm chi phí kho bãi.
+                        </p>
+                    </div>
+                </div>
+
+                 <!-- Feature 5 -->
+                 <div class="group relative p-1 rounded-2xl bg-gradient-to-b from-white/10 to-transparent hover:from-cyan-500/50 hover:to-purple-500/50 transition-all duration-500">
+                    <div class="absolute inset-0 bg-gradient-to-r from-cyan-500/20 to-purple-500/20 blur-xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                    <div class="relative h-full bg-slate-950 p-8 rounded-xl border border-white/5 overflow-hidden">
+                        <div class="w-14 h-14 rounded-lg bg-gradient-to-br from-red-500 to-rose-500 bg-opacity-10 flex items-center justify-center mb-6">
+                            <div class="bg-slate-950 p-2 rounded-md">
+                                <i data-lucide="cpu" class="w-8 h-8 text-red-400"></i>
+                            </div>
+                        </div>
+                        <h3 class="text-xl font-bold mb-3 text-white group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-cyan-400 group-hover:to-purple-400 transition-colors">
+                            Phương tiện tự hành
+                        </h3>
+                        <p class="text-slate-400 leading-relaxed text-sm">
+                            Thử nghiệm xe tự hành cấp độ thấp tại các khu công nghiệp và trường đại học, mở ra kỷ nguyên mới.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats / Challenges Section -->
+    <section id="thach-thuc" class="py-20 relative overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="bg-gradient-to-r from-slate-900 to-slate-800 rounded-3xl p-8 md:p-12 border border-white/10 shadow-2xl relative">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                    <!-- Left: Content -->
+                    <div>
+                        <div class="flex items-center gap-3 mb-6">
+                            <i data-lucide="alert-triangle" class="text-yellow-500 w-6 h-6"></i>
+                            <span class="text-yellow-500 font-bold uppercase tracking-wider">Thực trạng & Thách thức</span>
+                        </div>
+                        <h2 class="text-3xl md:text-4xl font-bold mb-6">Rào Cản Phát Triển Hạ Tầng Thông Minh</h2>
+                        <p class="text-slate-400 mb-8">
+                            Mặc dù tiềm năng là rất lớn, nhưng việc triển khai AI tại Việt Nam vẫn đối mặt với những thách thức đáng kể cần được giải quyết đồng bộ.
+                        </p>
+                        <ul class="space-y-4">
+                            <li class="flex items-start gap-3">
+                                <div class="mt-1 min-w-[20px] h-5 rounded-full bg-red-500/20 flex items-center justify-center">
+                                    <div class="w-2 h-2 bg-red-500 rounded-full"></div>
+                                </div>
+                                <span class="text-slate-300">Dữ liệu chưa đồng nhất trên phạm vi quốc gia</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <div class="mt-1 min-w-[20px] h-5 rounded-full bg-red-500/20 flex items-center justify-center">
+                                    <div class="w-2 h-2 bg-red-500 rounded-full"></div>
+                                </div>
+                                <span class="text-slate-300">Chi phí đầu tư hạ tầng & cảm biến còn cao</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <div class="mt-1 min-w-[20px] h-5 rounded-full bg-red-500/20 flex items-center justify-center">
+                                    <div class="w-2 h-2 bg-red-500 rounded-full"></div>
+                                </div>
+                                <span class="text-slate-300">Hành lang pháp lý cho xe tự hành chưa hoàn thiện</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Right: Card -->
+                    <div class="relative">
+                        <div class="absolute inset-0 bg-gradient-to-tr from-purple-500/20 to-cyan-500/20 rounded-2xl blur-lg transform rotate-3"></div>
+                        <div class="relative bg-slate-950 border border-white/10 rounded-2xl p-8">
+                            <div class="flex items-center justify-between mb-8 pb-8 border-b border-white/10">
+                                <div>
+                                    <p class="text-sm text-slate-400">Chủ sở hữu công nghệ</p>
+                                    <h3 class="text-2xl font-bold text-white mt-1">PKO4399</h3>
+                                </div>
+                                <i data-lucide="brain-circuit" class="w-12 h-12 text-purple-500"></i>
+                            </div>
+                            <div class="space-y-6">
+                                <div>
+                                    <div class="flex justify-between mb-2">
+                                        <span class="text-sm font-medium">Tối ưu hóa giao thông</span>
+                                        <span class="text-sm font-bold text-cyan-400">85%</span>
+                                    </div>
+                                    <div class="w-full bg-slate-800 rounded-full h-2">
+                                        <div class="bg-gradient-to-r from-cyan-500 to-blue-500 h-2 rounded-full w-[85%]"></div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="flex justify-between mb-2">
+                                        <span class="text-sm font-medium">Độ chính xác nhận diện</span>
+                                        <span class="text-sm font-bold text-purple-400">98.5%</span>
+                                    </div>
+                                    <div class="w-full bg-slate-800 rounded-full h-2">
+                                        <div class="bg-gradient-to-r from-purple-500 to-pink-500 h-2 rounded-full w-[98.5%]"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mt-8 pt-6 border-t border-white/10 flex items-center justify-center text-slate-500 text-sm gap-2">
+                                <i data-lucide="shield-check" class="w-4 h-4"></i> Xác thực bản quyền bởi PKO4399
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer / Copyright -->
+    <footer id="lien-he" class="bg-slate-950 border-t border-white/10 pt-16 pb-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
+                <div class="col-span-1 md:col-span-2">
+                    <!-- Logo Footer -->
+                    <div class="flex items-center gap-2 mb-4">
+                        <div class="relative w-8 h-8 bg-gradient-to-tr from-blue-600 to-purple-600 rounded-full flex items-center justify-center border border-slate-300">
+                            <i data-lucide="brain-circuit" class="text-white w-4 h-4"></i>
+                        </div>
+                        <span class="text-xl font-bold text-white font-orbitron">PKO4399</span>
+                    </div>
+                    <p class="mt-4 text-slate-400 text-sm max-w-sm">
+                        Tiên phong trong việc áp dụng Trí tuệ nhân tạo để giải quyết các bài toán giao thông đô thị tại Việt Nam. Hướng tới một tương lai di chuyển an toàn và thông minh.
+                    </p>
+                </div>
+                
+                <div>
+                    <h4 class="text-white font-bold mb-4 uppercase text-sm tracking-wider">Liên kết</h4>
+                    <ul class="space-y-2 text-sm text-slate-400">
+                        <li><a href="#" class="hover:text-cyan-400 transition-colors">Về chúng tôi</a></li>
+                        <li><a href="#" class="hover:text-cyan-400 transition-colors">Dự án thí điểm</a></li>
+                        <li><a href="#" class="hover:text-cyan-400 transition-colors">Tuyển dụng</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="text-white font-bold mb-4 uppercase text-sm tracking-wider">Pháp lý</h4>
+                    <ul class="space-y-2 text-sm text-slate-400">
+                        <li><a href="#" class="hover:text-cyan-400 transition-colors">Chính sách bảo mật</a></li>
+                        <li><a href="#" class="hover:text-cyan-400 transition-colors">Điều khoản sử dụng</a></li>
+                        <li class="flex items-center gap-2 text-purple-400 font-semibold">
+                            <i data-lucide="copyright" class="w-3 h-3"></i> Bản quyền PKO4399
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+                <p class="text-slate-500 text-sm">
+                    © 2024 PKO4399. All rights reserved.
+                </p>
+                <div class="flex items-center gap-4">
+                   <div class="px-3 py-1 bg-white/5 rounded border border-white/10 text-xs text-slate-400 font-mono">
+                      ID: PKO-4399-VN-AI
+                   </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Script xử lý Logic -->
+    <script>
+        // Khởi tạo icons
+        lucide.createIcons();
+
+        // Xử lý Menu Mobile
+        const btn = document.getElementById('mobile-menu-btn');
+        const menu = document.getElementById('mobile-menu');
+        const icon = document.getElementById('menu-icon');
+        let isMenuOpen = false;
+
+        btn.addEventListener('click', () => {
+            isMenuOpen = !isMenuOpen;
+            if(isMenuOpen) {
+                menu.classList.remove('hidden');
+                // Thay đổi icon thành dấu X (tùy chỉnh nếu muốn, ở đây giữ nguyên logic đơn giản)
+                icon.setAttribute('data-lucide', 'x');
+            } else {
+                menu.classList.add('hidden');
+                icon.setAttribute('data-lucide', 'menu');
+            }
+            lucide.createIcons(); // Render lại icon mới
+        });
+
+        // Xử lý Scroll
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 20) {
+                navbar.classList.add('bg-slate-900/90', 'backdrop-blur-md', 'shadow-lg', 'border-b', 'border-white/10');
+                navbar.classList.remove('bg-transparent');
+            } else {
+                navbar.classList.remove('bg-slate-900/90', 'backdrop-blur-md', 'shadow-lg', 'border-b', 'border-white/10');
+                navbar.classList.add('bg-transparent');
+            }
+        });
+    </script>
+</body>
+</html>
